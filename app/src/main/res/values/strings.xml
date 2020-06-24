@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Stocks</string>
+    <string name="app_tab1">Tablero</string>
+    <string name="app_tab2">Órdenes</string>
+    <string name="stock_symbol">Símbolo del valor</string>
+    <string name="stock_price">Precio por acción</string>
+    <string name="stocks_number">Número de acciones</string>
+    <string name="add">Añadir</string>
+    <string name="delete">Eliminar</string>
+    <string name="symbol_not_valid">El valor no es valido</string>
+    <string name="stock_price_not_valid">El valor no es valido</string>
+    <string name="stocks_number_not_valid">El valor no es valido</string>
+</resources>
