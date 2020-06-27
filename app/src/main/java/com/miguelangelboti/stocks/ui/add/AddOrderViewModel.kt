@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.miguelangelboti.stocks.data.StocksRepository
 import com.miguelangelboti.stocks.entities.Order
+import com.miguelangelboti.stocks.entities.OrderRequest
 import com.miguelangelboti.stocks.entities.Stock
 import com.miguelangelboti.stocks.utils.event.VoidEvent
 import kotlinx.coroutines.launch
@@ -40,7 +41,7 @@ class AddOrderViewModel(application: Application) : AndroidViewModel(application
         _isPriceValid.value = priceParsed != null
 
         if (isSymbolValid.value == true && stocksParsed != null && priceParsed != null) {
-            repository.addOrder(Order(stock = Stock(symbol = symbol), stocks = stocksParsed, price = priceParsed))
+            repository.addOrder(OrderRequest(symbol, stocksParsed, priceParsed))
             _finish.value = VoidEvent()
         }
     }

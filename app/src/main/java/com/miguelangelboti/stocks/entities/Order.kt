@@ -5,4 +5,10 @@ data class Order(
     val stock: Stock,
     val stocks: Float,
     val price: Float
-)
+) {
+    constructor(request: OrderRequest, stock: Stock) : this(
+        stock = stock,
+        stocks = request.stocks,
+        price = request.price
+    )
+}

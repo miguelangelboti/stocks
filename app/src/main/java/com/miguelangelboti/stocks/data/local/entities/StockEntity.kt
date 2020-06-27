@@ -23,17 +23,28 @@ fun Stock.toEntity(): StockEntity {
     return StockEntity(
         id = id,
         symbol = symbol,
-        name = name!!,
-        region = region!!,
-        marketOpen = "",    // TODO: Complete this property.
-        marketClose = "",   // TODO: Complete this property.
-        timezone = "",      // TODO: Complete this property.
-        currency = "",      // TODO: Complete this property.
-        price = 0f,         // TODO: Complete this retrieving the price previously.
-        priceDate = ""      // TODO: Complete this property.
+        name = name,
+        region = region,
+        marketOpen = marketOpen,
+        marketClose = marketClose,
+        timezone = timezone,
+        currency = currency,
+        price = 0f,     // TODO: Complete this retrieving the price previously.
+        priceDate = ""  // TODO: Complete this property.
     )
 }
 
 fun StockEntity.toDomain(): Stock {
-    return Stock(id, symbol, name, region, price, priceDate)
+    return Stock(
+        id = id,
+        symbol = symbol,
+        name = name,
+        region = region,
+        marketOpen = marketOpen,
+        marketClose = marketClose,
+        timezone = timezone,
+        currency = currency,
+        price = price,
+        priceDate = priceDate
+    )
 }

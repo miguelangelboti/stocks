@@ -27,6 +27,10 @@ private fun Match.toDomain(): Stock {
     return Stock(
         symbol = symbol,
         name = name,
-        region = region
+        region = region,
+        marketOpen = marketOpen,
+        marketClose = marketClose,
+        timezone = timezone,
+        currency = currency
     )
 }

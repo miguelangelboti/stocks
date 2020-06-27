@@ -4,6 +4,7 @@ import android.content.Context
 import com.miguelangelboti.stocks.data.local.LocalDataSource
 import com.miguelangelboti.stocks.data.network.NetworkDataSource
 import com.miguelangelboti.stocks.entities.Order
+import com.miguelangelboti.stocks.entities.OrderRequest
 import com.miguelangelboti.stocks.entities.Stock
 import com.miguelangelboti.stocks.utils.getUtcDatetimeAsString
 import timber.log.Timber
@@ -16,11 +17,11 @@ class StocksRepository(context: Context) {
     private val cacheTime = 60
     private var lasTimestamp = 0L
 
-    suspend fun addOrder(order: Order) {
-        Timber.d("addOrder()")
-        val stock = getStock(order.stock.symbol)
+    suspend fun addOrder(request: OrderRequest) {
+        Timber.d("addOrder($request)")
+        val stock = getStock(request.symbol)
         require(stock != null) { "The stock was not found adding a new order!" }
-        localDataSource.addOrder(order.copy(stock = stock))
+        localDataSource.addOrder(Order(request, stock))
     }
 
     private suspend fun getStock(symbol: String): Stock? {
