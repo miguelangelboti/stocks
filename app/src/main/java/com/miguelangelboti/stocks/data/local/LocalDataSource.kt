@@ -16,6 +16,11 @@ class LocalDataSource(context: Context) {
     private var stockDao = dataBase.stockDao()
     private var orderDao = dataBase.orderDao()
 
+    suspend fun getStocks(): List<Stock> {
+        Timber.d("getStocks()")
+        return stockDao.getStocks().map { it.toDomain() }
+    }
+
     suspend fun getStock(id: Int): Stock? {
         Timber.d("getStock($id)")
         return stockDao.getStock(id)?.toDomain()

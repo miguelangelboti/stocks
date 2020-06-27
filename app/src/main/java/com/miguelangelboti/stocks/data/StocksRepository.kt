@@ -45,6 +45,26 @@ class StocksRepository @Inject constructor(
         localDataSource.deleteOrder(orderId)
     }
 
+    suspend fun getStocks(): List<Stock> {
+        Timber.d("getStocks()")
+        val elapsedTime = (System.currentTimeMillis() - lasTimestamp).absoluteValue
+        if (elapsedTime > cacheTime) {
+            Timber.d("The cache is not valid.")
+            lasTimestamp = System.currentTimeMillis()
+            return localDataSource.getStocks().also { it.updateStockPrices() }
+        }
+        Timber.d("The cache is valid.")
+        return localDataSource.getStocks()
+    }
+
+    private suspend fun List<Stock>.updateStockPrices() {
+        val date = getUtcDatetimeAsString()
+        forEach {
+            val price = networkDataSource.getStockPrice(it.symbol)
+            localDataSource.updatePrice(it.symbol, price, date)
+        }
+    }
+
     suspend fun getOrders(): List<Order> {
         Timber.d("getOrders()")
         val elapsedTime = (System.currentTimeMillis() - lasTimestamp).absoluteValue

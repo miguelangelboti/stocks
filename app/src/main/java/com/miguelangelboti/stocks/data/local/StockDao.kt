@@ -8,6 +8,9 @@ import com.miguelangelboti.stocks.data.local.entities.StockEntity
 @Dao
 interface StockDao {
 
+    @Query("SELECT * from stocks")
+    suspend fun getStocks(): List<StockEntity>
+
     @Query("SELECT * from stocks WHERE id = :id")
     suspend fun getStock(id: Int): StockEntity?
 
