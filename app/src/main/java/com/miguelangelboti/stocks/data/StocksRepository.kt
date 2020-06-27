@@ -14,7 +14,7 @@ class StocksRepository(context: Context) {
     private val localDataSource = LocalDataSource(context)
     private val networkDataSource = NetworkDataSource()
 
-    private val cacheTime = 60
+    private val cacheTime = 60_000
     private var lasTimestamp = 0L
 
     suspend fun addOrder(request: OrderRequest) {
@@ -40,7 +40,7 @@ class StocksRepository(context: Context) {
 
     suspend fun getOrders(): List<Order> {
         Timber.d("getOrders()")
-        val elapsedTime = System.currentTimeMillis() - lasTimestamp
+        val elapsedTime = (System.currentTimeMillis() - lasTimestamp).absoluteValue
         if (elapsedTime > cacheTime) {
             Timber.d("The cache is not valid.")
             lasTimestamp = System.currentTimeMillis()
