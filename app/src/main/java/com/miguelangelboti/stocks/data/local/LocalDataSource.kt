@@ -1,12 +1,11 @@
 package com.miguelangelboti.stocks.data.local
 
 import android.content.Context
+import com.miguelangelboti.stocks.data.local.entities.OrderEntity
 import com.miguelangelboti.stocks.data.local.entities.toDomain
 import com.miguelangelboti.stocks.data.local.entities.toEntity
 import com.miguelangelboti.stocks.entities.Order
 import com.miguelangelboti.stocks.entities.Stock
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import timber.log.Timber
 
 class LocalDataSource(context: Context) {
@@ -38,11 +37,12 @@ class LocalDataSource(context: Context) {
 
     suspend fun getOrders(): List<Order> {
         Timber.d("getOrders()")
-        return orderDao.getOrders().map { order ->
-            val stock = getStock(order.stockId)
-            require(stock != null) { "The stock was not found getting the orders!" }
-            toDomain(order, stock)
-        }
+        return orderDao.getOrders().toDomain()
+    }
+
+    suspend fun getOrders(stockId: Int): List<Order> {
+        Timber.d("getOrders($stockId)")
+        return orderDao.getOrders(stockId).toDomain()
     }
 
     suspend fun addOrder(order: Order) {
@@ -58,5 +58,13 @@ class LocalDataSource(context: Context) {
     suspend fun updatePrice(symbol: String, price: Float, priceDate: String) {
         Timber.d("updatePrice($symbol, $price, $priceDate)")
         stockDao.update(symbol, price, priceDate)
+    }
+
+    private suspend fun List<OrderEntity>.toDomain(): List<Order> {
+        return map { order ->
+            val stock = getStock(order.stockId)
+            require(stock != null) { "The stock was not found getting the orders!" }
+            toDomain(order, stock)
+        }
     }
 }

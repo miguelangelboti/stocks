@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.daimajia.swipe.SwipeLayout
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter
@@ -15,7 +14,10 @@ import com.miguelangelboti.stocks.entities.Stock
 import com.miguelangelboti.stocks.ui.stocks.StocksAdapter.StocksViewHolder
 import kotlinx.android.synthetic.main.item_recyclerview.view.swipeForegroundLayout
 
-class StocksAdapter internal constructor(context: Context) : RecyclerSwipeAdapter<StocksViewHolder>() {
+class StocksAdapter internal constructor(
+    context: Context,
+    private val listener: (Stock) -> Unit
+) : RecyclerSwipeAdapter<StocksViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var data = emptyList<Stock>()
@@ -45,16 +47,10 @@ class StocksAdapter internal constructor(context: Context) : RecyclerSwipeAdapte
     }
 
     private fun setListeners(holder: StocksViewHolder, current: Stock) {
+        holder.swipeLayout.swipeForegroundLayout.setOnClickListener { listener(current) }
         holder.swipeLayout.swipeForegroundLayout.setOnLongClickListener {
             holder.swipeLayout.open()
             true
-        }
-        holder.swipeLayout.swipeForegroundLayout.setOnClickListener {
-            Toast.makeText(
-                holder.itemView.context,
-                current.symbol,
-                Toast.LENGTH_SHORT
-            ).show()
         }
     }
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
@@ -20,7 +21,10 @@ class OrdersFragment : Fragment() {
 
     companion object {
         val TAG = OrdersFragment::class.java.simpleName
-        fun newInstance() = OrdersFragment()
+        private const val BUNDLE_KEY_STOCK_ID = "BUNDLE_KEY_STOCK_ID"
+        fun newInstance(stockId: Int) = OrdersFragment().apply {
+            arguments = bundleOf(Pair(BUNDLE_KEY_STOCK_ID, stockId))
+        }
     }
 
     private val viewModel by viewModels<OrdersViewModel>()
@@ -35,8 +39,13 @@ class OrdersFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
         recyclerView.addItemDecoration(DividerItemDecoration(context, VERTICAL))
-        swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
+        swipeRefreshLayout.setOnRefreshListener { viewModel.refresh(getStockId()) }
         viewModel.stopRefresh.observe(viewLifecycleOwner) { swipeRefreshLayout.isRefreshing = false }
         viewModel.orders.observe(viewLifecycleOwner) { adapter.setData(it) }
+        viewModel.init(getStockId())
+    }
+
+    private fun getStockId(): Int {
+        return requireArguments().getInt(BUNDLE_KEY_STOCK_ID)
     }
 }

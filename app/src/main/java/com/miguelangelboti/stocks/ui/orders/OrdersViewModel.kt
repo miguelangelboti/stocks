@@ -21,14 +21,14 @@ class OrdersViewModel @ViewModelInject constructor(
     private val _stopRefresh = MutableLiveData<VoidEvent>()
     val stopRefresh: LiveData<VoidEvent> = _stopRefresh
 
-    init {
+    fun init(stockId: Int) {
         viewModelScope.launch {
-            _orders.value = repository.getOrders()
+            _orders.value = repository.getOrders(stockId)
         }
     }
 
-    fun refresh() = viewModelScope.launch {
-        _orders.value = repository.getOrders()
+    fun refresh(stockId: Int) = viewModelScope.launch {
+        _orders.value = repository.getOrders(stockId)
         _stopRefresh.value = VoidEvent()
     }
 }

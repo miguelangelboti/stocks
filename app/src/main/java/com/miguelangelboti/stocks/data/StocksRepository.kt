@@ -65,16 +65,17 @@ class StocksRepository @Inject constructor(
         }
     }
 
-    suspend fun getOrders(): List<Order> {
-        Timber.d("getOrders()")
+    suspend fun getOrders(stockId: Int): List<Order> {
+        Timber.d("getOrders($stockId)")
+        // TODO: Check the best time to update prices.
         val elapsedTime = (System.currentTimeMillis() - lasTimestamp).absoluteValue
         if (elapsedTime > cacheTime) {
             Timber.d("The cache is not valid.")
             lasTimestamp = System.currentTimeMillis()
-            return localDataSource.getOrders().also { it.updatePrices() }
+            return localDataSource.getOrders(stockId).also { it.updatePrices() }
         }
         Timber.d("The cache is valid.")
-        return localDataSource.getOrders()
+        return localDataSource.getOrders(stockId)
     }
 
     private suspend fun List<Order>.updatePrices() {
