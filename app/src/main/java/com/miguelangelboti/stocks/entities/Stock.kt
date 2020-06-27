@@ -5,5 +5,6 @@ data class Stock(
     val symbol: String,
     val name: String? = null,
     val region: String? = null,
-    val price: Price? = null
+    val price: Float? = null,
+    val priceDate: String? = null
 )

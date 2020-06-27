@@ -33,7 +33,7 @@ class OrdersAdapter internal constructor(context: Context) : RecyclerSwipeAdapte
         val current = data[position]
         holder.symbolTextView.text = current.stock.symbol
 //        holder.nameTextView.text = current.name
-        holder.priceTextView.text = current.stock.price?.price.toString()
+        holder.priceTextView.text = current.stock.price.toString()
         holder.swipeLayout.showMode = SwipeLayout.ShowMode.LayDown
         setListeners(holder, current)
         mItemManger.bindView(holder.itemView, position)

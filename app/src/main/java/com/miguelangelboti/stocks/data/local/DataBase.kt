@@ -5,21 +5,21 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.miguelangelboti.stocks.data.local.entities.OrderEntity
-import com.miguelangelboti.stocks.data.local.entities.PriceEntity
+import com.miguelangelboti.stocks.data.local.entities.StockEntity
 
 @Database(
-    entities = [
-        OrderEntity::class,
-        PriceEntity::class
-    ],
     version = 1,
-    exportSchema = false
+    exportSchema = false,
+    entities = [
+        StockEntity::class,
+        OrderEntity::class
+    ]
 )
 abstract class DataBase : RoomDatabase() {
 
-    abstract fun orderDao(): OrderDao
+    abstract fun stockDao(): StockDao
 
-    abstract fun pricesDao(): PriceDao
+    abstract fun orderDao(): OrderDao
 
     companion object {
         @Volatile
