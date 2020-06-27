@@ -9,9 +9,11 @@ import androidx.fragment.app.commitNow
 import com.miguelangelboti.stocks.ui.add.AddOrderActivity
 import com.miguelangelboti.stocks.ui.dashboard.DashboardFragment
 import com.miguelangelboti.stocks.ui.stocks.StocksFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.bottomNavigation
 import kotlinx.android.synthetic.main.activity_main.fab
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

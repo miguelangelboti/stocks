@@ -1,20 +1,19 @@
 package com.miguelangelboti.stocks.ui.add
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.miguelangelboti.stocks.data.StocksRepository
-import com.miguelangelboti.stocks.entities.Order
 import com.miguelangelboti.stocks.entities.OrderRequest
 import com.miguelangelboti.stocks.entities.Stock
 import com.miguelangelboti.stocks.utils.event.VoidEvent
 import kotlinx.coroutines.launch
 
-class AddOrderViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository = StocksRepository(getApplication())
+class AddOrderViewModel @ViewModelInject constructor(
+    private val repository: StocksRepository
+) : ViewModel() {
 
     private val _isSymbolValid = MutableLiveData<Boolean>()
     val isSymbolValid: LiveData<Boolean> = _isSymbolValid

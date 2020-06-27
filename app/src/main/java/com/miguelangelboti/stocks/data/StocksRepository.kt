@@ -7,9 +7,16 @@ import com.miguelangelboti.stocks.entities.Order
 import com.miguelangelboti.stocks.entities.OrderRequest
 import com.miguelangelboti.stocks.entities.Stock
 import com.miguelangelboti.stocks.utils.getUtcDatetimeAsString
+import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
+import kotlin.math.absoluteValue
 
-class StocksRepository(context: Context) {
+@Singleton
+class StocksRepository @Inject constructor(
+    @ApplicationContext context: Context
+) {
 
     private val localDataSource = LocalDataSource(context)
     private val networkDataSource = NetworkDataSource()

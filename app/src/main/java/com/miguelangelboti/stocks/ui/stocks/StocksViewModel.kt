@@ -1,18 +1,19 @@
 package com.miguelangelboti.stocks.ui.stocks
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.miguelangelboti.stocks.data.StocksRepository
 import com.miguelangelboti.stocks.entities.Order
 import com.miguelangelboti.stocks.utils.event.VoidEvent
 import kotlinx.coroutines.launch
+import javax.inject.Singleton
 
-class StocksViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository = StocksRepository(getApplication())
+class StocksViewModel @ViewModelInject constructor(
+    private val repository: StocksRepository
+) : ViewModel() {
 
     // val orders = liveData(Dispatchers.IO) { emit(repository.getOrders()) }
     private val _orders = MutableLiveData<List<Order>>()

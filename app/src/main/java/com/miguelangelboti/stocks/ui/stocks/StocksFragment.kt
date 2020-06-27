@@ -12,9 +12,11 @@ import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.miguelangelboti.stocks.R
 import com.miguelangelboti.stocks.ui.orders.OrdersFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_orders.recyclerView
 import kotlinx.android.synthetic.main.fragment_orders.swipeRefreshLayout
 
+@AndroidEntryPoint
 class StocksFragment : Fragment() {
 
     companion object {

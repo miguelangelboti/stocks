@@ -10,12 +10,14 @@ import com.miguelangelboti.stocks.entities.Stock
 import com.miguelangelboti.stocks.utils.extensions.clearErrorWhenTextChanges
 import com.miguelangelboti.stocks.utils.extensions.observeEvent
 import com.miguelangelboti.stocks.utils.extensions.setErrorText
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_add_order.autoCompleteTextView
 import kotlinx.android.synthetic.main.activity_add_order.button
 import kotlinx.android.synthetic.main.activity_add_order.priceEditText
 import kotlinx.android.synthetic.main.activity_add_order.stocksEditText
 import kotlinx.android.synthetic.main.activity_add_order.symbolEditText
 
+@AndroidEntryPoint
 class AddOrderActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<AddOrderViewModel>()
