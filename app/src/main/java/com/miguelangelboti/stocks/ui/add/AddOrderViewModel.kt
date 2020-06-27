@@ -40,7 +40,7 @@ class AddOrderViewModel(application: Application) : AndroidViewModel(application
         _isPriceValid.value = priceParsed != null
 
         if (isSymbolValid.value == true && stocksParsed != null && priceParsed != null) {
-            repository.addOrder(Order(stock = Stock(symbol), stocks = stocksParsed, price = priceParsed))
+            repository.addOrder(Order(stock = Stock(symbol = symbol), stocks = stocksParsed, price = priceParsed))
             _finish.value = VoidEvent()
         }
     }
