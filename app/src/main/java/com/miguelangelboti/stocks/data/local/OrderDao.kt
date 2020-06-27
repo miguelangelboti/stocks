@@ -1,7 +1,6 @@
 package com.miguelangelboti.stocks.data.local
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.miguelangelboti.stocks.data.local.entities.OrderEntity
@@ -13,8 +12,8 @@ interface OrderDao {
     suspend fun getOrders(): List<OrderEntity>
 
     @Insert
-    suspend fun insert(order: OrderEntity)
+    suspend fun insert(entity: OrderEntity)
 
-    @Query("DELETE FROM orders WHERE id = :orderId")
-    suspend fun delete(orderId: Int)
+    @Query("DELETE FROM orders WHERE id = :id")
+    suspend fun delete(id: Int)
 }

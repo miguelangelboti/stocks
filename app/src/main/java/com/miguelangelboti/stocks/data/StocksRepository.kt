@@ -16,7 +16,17 @@ class StocksRepository(context: Context) {
     private var lasTimestamp = 0L
 
     suspend fun addOrder(order: Order) {
-        localDataSource.addOrder(order)
+        val stock = getStock(order.stock.symbol)
+        require(stock != null) { "The stock was not found adding a new order!" }
+        localDataSource.addOrder(order.copy(stock = stock))
+    }
+
+    private suspend fun getStock(symbol: String): Stock? {
+        return localDataSource.getStock(symbol)
+            ?: networkDataSource.getStock(symbol)?.also {
+                val id = localDataSource.addStock(it)
+                return it.copy(id = id)
+            }
     }
 
     suspend fun deleteOrder(orderId: Int) {
@@ -39,7 +49,7 @@ class StocksRepository(context: Context) {
             .forEach { symbol ->
                 val price = networkDataSource.getStockPrice(symbol)
                 localDataSource.updatePrice(symbol, price, date)
-        }
+            }
     }
 
     suspend fun searchSymbol(symbol: String): List<Stock> {
