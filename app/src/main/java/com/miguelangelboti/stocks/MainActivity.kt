@@ -3,11 +3,12 @@ package com.miguelangelboti.stocks
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View.INVISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commitNow
 import com.miguelangelboti.stocks.ui.add.AddOrderActivity
 import com.miguelangelboti.stocks.ui.dashboard.DashboardFragment
-import com.miguelangelboti.stocks.ui.orders.OrdersFragment
+import com.miguelangelboti.stocks.ui.stocks.StocksFragment
 import kotlinx.android.synthetic.main.activity_main.bottomNavigation
 import kotlinx.android.synthetic.main.activity_main.fab
 
@@ -17,8 +18,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
-            bottomNavigation.selectedItemId = R.id.item2
-            showOrdersFragment()
+            showStocksFragment()
+            fab.visibility = INVISIBLE
         }
 
         bottomNavigation.setOnNavigationItemSelectedListener(::onNavigationItemSelected)
@@ -27,25 +28,25 @@ class MainActivity : AppCompatActivity() {
 
     private fun onNavigationItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.item1 -> {
-            fab.hide()
-            showDashboardFragment()
+            showStocksFragment()
             true
         }
         R.id.item2 -> {
-            fab.show()
-            showOrdersFragment()
+            showDashboardFragment()
             true
         }
         else -> false
     }
 
-    private fun showDashboardFragment() = with(supportFragmentManager) {
-        findFragmentByTag(DashboardFragment.TAG)?.let { return }
-        commitNow { replace(R.id.container, DashboardFragment.newInstance(), DashboardFragment.TAG) }
+    private fun showStocksFragment() = with(supportFragmentManager) {
+        fab.hide()
+        findFragmentByTag(StocksFragment.TAG)?.let { return }
+        commitNow { replace(R.id.container, StocksFragment.newInstance(), StocksFragment.TAG) }
     }
 
-    private fun showOrdersFragment() = with(supportFragmentManager) {
-        findFragmentByTag(OrdersFragment.TAG)?.let { return }
-        commitNow { replace(R.id.container, OrdersFragment.newInstance(), OrdersFragment.TAG) }
+    private fun showDashboardFragment() = with(supportFragmentManager) {
+        fab.show()
+        findFragmentByTag(DashboardFragment.TAG)?.let { return }
+        commitNow { replace(R.id.container, DashboardFragment.newInstance(), DashboardFragment.TAG) }
     }
 }

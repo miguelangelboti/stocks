@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Stocks</string>
-    <string name="app_tab1">Tablero</string>
-    <string name="app_tab2">Órdenes</string>
+    <string name="stocks">Stocks</string>
+    <string name="dashboard">Tablero</string>
+    <string name="orders">Órdenes</string>
     <string name="stock_symbol">Símbolo del valor</string>
     <string name="stock_price">Precio por acción</string>
     <string name="stocks_number">Número de acciones</string>

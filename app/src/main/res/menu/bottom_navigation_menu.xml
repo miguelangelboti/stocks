@@ -3,11 +3,11 @@
     <item
         android:id="@+id/item1"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_account_balance_24"
-        android:title="@string/app_tab1" />
+        android:icon="@drawable/ic_baseline_show_chart_24"
+        android:title="@string/stocks" />
     <item
         android:id="@+id/item2"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_show_chart_24"
-        android:title="@string/app_tab2" />
+        android:icon="@drawable/ic_baseline_account_balance_24"
+        android:title="@string/dashboard" />
 </menu>
