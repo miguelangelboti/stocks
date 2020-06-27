@@ -21,4 +21,8 @@ class NetworkDataSource {
     suspend fun searchSymbol(symbol: String): List<Stock> {
         return service.searchSymbol(symbol).toDomain()
     }
+
+    suspend fun getStock(symbol: String): Stock? {
+        return service.searchSymbol(symbol).toDomain(symbol)
+    }
 }
