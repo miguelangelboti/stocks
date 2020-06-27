@@ -11,14 +11,14 @@ import com.daimajia.swipe.SwipeLayout
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter
 import com.miguelangelboti.stocks.R
 import com.miguelangelboti.stocks.R.layout
-import com.miguelangelboti.stocks.entities.Order
+import com.miguelangelboti.stocks.entities.Stock
 import com.miguelangelboti.stocks.ui.stocks.StocksAdapter.StocksViewHolder
 import kotlinx.android.synthetic.main.item_recyclerview.view.swipeForegroundLayout
 
 class StocksAdapter internal constructor(context: Context) : RecyclerSwipeAdapter<StocksViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private var data = emptyList<Order>()
+    private var data = emptyList<Stock>()
 
     override fun getItemCount() = data.size
     override fun getItemId(position: Int) = position.toLong()
@@ -31,20 +31,20 @@ class StocksAdapter internal constructor(context: Context) : RecyclerSwipeAdapte
 
     override fun onBindViewHolder(holder: StocksViewHolder, position: Int) {
         val current = data[position]
-        holder.symbolTextView.text = current.stock.symbol
+        holder.symbolTextView.text = current.symbol
 //        holder.nameTextView.text = current.name
-        holder.priceTextView.text = current.stock.price.toString()
+        holder.priceTextView.text = current.price.toString()
         holder.swipeLayout.showMode = SwipeLayout.ShowMode.LayDown
         setListeners(holder, current)
         mItemManger.bindView(holder.itemView, position)
     }
 
-    internal fun setData(data: List<Order>) {
+    internal fun setData(data: List<Stock>) {
         this.data = data
         notifyDataSetChanged()
     }
 
-    private fun setListeners(holder: StocksViewHolder, current: Order) {
+    private fun setListeners(holder: StocksViewHolder, current: Stock) {
         holder.swipeLayout.swipeForegroundLayout.setOnLongClickListener {
             holder.swipeLayout.open()
             true
@@ -52,7 +52,7 @@ class StocksAdapter internal constructor(context: Context) : RecyclerSwipeAdapte
         holder.swipeLayout.swipeForegroundLayout.setOnClickListener {
             Toast.makeText(
                 holder.itemView.context,
-                current.stock.symbol,
+                current.symbol,
                 Toast.LENGTH_SHORT
             ).show()
         }

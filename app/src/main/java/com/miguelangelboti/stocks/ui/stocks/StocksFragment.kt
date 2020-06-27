@@ -20,8 +20,8 @@ import kotlinx.android.synthetic.main.fragment_orders.swipeRefreshLayout
 class StocksFragment : Fragment() {
 
     companion object {
-        val TAG = OrdersFragment::class.java.simpleName
-        fun newInstance() = OrdersFragment()
+        val TAG = StocksFragment::class.java.simpleName
+        fun newInstance() = StocksFragment()
     }
 
     private val viewModel by viewModels<StocksViewModel>()
@@ -38,6 +38,6 @@ class StocksFragment : Fragment() {
         recyclerView.addItemDecoration(DividerItemDecoration(context, VERTICAL))
         swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
         viewModel.stopRefresh.observe(viewLifecycleOwner) { swipeRefreshLayout.isRefreshing = false }
-        viewModel.orders.observe(viewLifecycleOwner) { adapter.setData(it) }
+        viewModel.stocks.observe(viewLifecycleOwner) { adapter.setData(it) }
     }
 }
