@@ -21,7 +21,7 @@ import com.miguelangelboti.stocks.entities.Stock
 )
 class OrderEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "stock_id") val stockId: Int,
+    @ColumnInfo(name = "stock_id", index = true) val stockId: Int,
     @ColumnInfo(name = "stocks") val stocks: Float,
     @ColumnInfo(name = "price") val price: Float
 )
