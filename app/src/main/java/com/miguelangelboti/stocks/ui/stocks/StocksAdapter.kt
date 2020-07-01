@@ -12,7 +12,7 @@ import com.miguelangelboti.stocks.R
 import com.miguelangelboti.stocks.R.layout
 import com.miguelangelboti.stocks.entities.Stock
 import com.miguelangelboti.stocks.ui.stocks.StocksAdapter.StocksViewHolder
-import kotlinx.android.synthetic.main.item_recyclerview.view.swipeForegroundLayout
+import kotlinx.android.synthetic.main.item_order.view.swipeForegroundLayout
 
 class StocksAdapter internal constructor(
     context: Context,
@@ -27,14 +27,14 @@ class StocksAdapter internal constructor(
     override fun getSwipeLayoutResourceId(position: Int) = R.id.swipeLayout
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StocksViewHolder {
-        val itemView = inflater.inflate(layout.item_recyclerview, parent, false)
+        val itemView = inflater.inflate(layout.item_stock, parent, false)
         return StocksViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: StocksViewHolder, position: Int) {
         val current = data[position]
         holder.symbolTextView.text = current.symbol
-//        holder.nameTextView.text = current.name
+        holder.nameTextView.text = current.name
         holder.priceTextView.text = current.price.toString()
         holder.swipeLayout.showMode = SwipeLayout.ShowMode.LayDown
         setListeners(holder, current)

@@ -11,4 +11,5 @@
     <string name="symbol_not_valid">El valor no es valido</string>
     <string name="stock_price_not_valid">El valor no es valido</string>
     <string name="stocks_number_not_valid">El valor no es valido</string>
+    <string name="titles">Títulos %s</string>
 </resources>

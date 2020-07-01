@@ -5,4 +5,6 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="kmw">#FFFFFF</color>
     <color name="km0_10">#16000000</color>
+    <color name="green">#77DD77</color>
+    <color name="red">#FF6961</color>
 </resources>
