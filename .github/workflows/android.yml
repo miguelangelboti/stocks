@@ -20,7 +20,7 @@ jobs:
     - name: Build debug APK
       run: ./gradlew assembleDebug -PALPHAVANTAGE_API_KEY=${{ secrets.ALPHAVANTAGE_API_KEY }}
     - name: Upload APK
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: app
         path: app/build/outputs/apk/debug/app-debug.apk
