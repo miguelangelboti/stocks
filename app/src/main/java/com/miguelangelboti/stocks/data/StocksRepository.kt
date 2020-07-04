@@ -89,7 +89,7 @@ class StocksRepository @Inject constructor(
             }
     }
 
-    suspend fun searchSymbol(symbol: String): List<Stock> {
+    suspend fun searchSymbol(symbol: String): List<String> {
         return networkDataSource.searchSymbol(symbol)
     }
 }

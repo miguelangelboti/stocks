@@ -20,7 +20,7 @@ class NetworkDataSource {
         return service.getStockPrice(symbol).quote.price
     }
 
-    suspend fun searchSymbol(symbol: String): List<Stock> {
+    suspend fun searchSymbol(symbol: String): List<String> {
         Timber.d("searchSymbol($symbol)")
         return service.searchSymbol(symbol).toDomain()
     }

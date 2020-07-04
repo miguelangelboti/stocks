@@ -15,8 +15,8 @@ data class Match(
     @field:Json(name = "8. currency") val currency: String
 )
 
-fun SearchSymbolResult.toDomain(): List<Stock> {
-    return matches.map { it.toDomain() }
+fun SearchSymbolResult.toDomain(): List<String> {
+    return matches.map { it.symbol }
 }
 
 fun SearchSymbolResult.toDomain(symbol: String): Stock? {

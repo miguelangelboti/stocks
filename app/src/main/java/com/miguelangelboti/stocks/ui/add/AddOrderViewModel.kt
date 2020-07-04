@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.miguelangelboti.stocks.data.StocksRepository
 import com.miguelangelboti.stocks.entities.OrderRequest
-import com.miguelangelboti.stocks.entities.Stock
 import com.miguelangelboti.stocks.utils.event.VoidEvent
 import kotlinx.coroutines.launch
 
@@ -24,8 +23,8 @@ class AddOrderViewModel @ViewModelInject constructor(
     private val _isPriceValid = MutableLiveData<Boolean>()
     val isPriceValid: LiveData<Boolean> = _isPriceValid
 
-    private val _foundSymbols = MutableLiveData<List<Stock>>()
-    val foundSymbols: LiveData<List<Stock>> = _foundSymbols
+    private val _foundSymbols = MutableLiveData<List<String>>()
+    val foundSymbols: LiveData<List<String>> = _foundSymbols
 
     private val _finish = MutableLiveData<VoidEvent>()
     val finish: LiveData<VoidEvent> = _finish

@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.observe
 import com.miguelangelboti.stocks.R
-import com.miguelangelboti.stocks.entities.Stock
 import com.miguelangelboti.stocks.utils.extensions.clearErrorWhenTextChanges
 import com.miguelangelboti.stocks.utils.extensions.observeEvent
 import com.miguelangelboti.stocks.utils.extensions.setErrorText
@@ -64,8 +63,8 @@ class AddOrderActivity : AppCompatActivity() {
         viewModel.searchSymbol(text)
     }
 
-    private fun setAutoCompleteItems(items: List<Stock>) {
-        autoCompleteTextView.setAdapter(AutoCompleteListAdapter(this, items.map { stock -> stock.symbol }))
+    private fun setAutoCompleteItems(items: List<String>) {
+        autoCompleteTextView.setAdapter(AutoCompleteListAdapter(this, items))
         autoCompleteTextView.showDropDown()
     }
 
