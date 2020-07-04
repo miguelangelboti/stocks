@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
             showStocksFragment()
-            fab.visibility = INVISIBLE
         }
 
         bottomNavigation.setOnNavigationItemSelectedListener(::onNavigationItemSelected)
@@ -41,13 +40,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showStocksFragment() = with(supportFragmentManager) {
-        fab.hide()
+        fab.show()
         findFragmentByTag(StocksFragment.TAG)?.let { return }
         commitNow { replace(R.id.container, StocksFragment.newInstance(), StocksFragment.TAG) }
     }
 
     private fun showDashboardFragment() = with(supportFragmentManager) {
-        fab.show()
+        fab.hide()
         findFragmentByTag(DashboardFragment.TAG)?.let { return }
         commitNow { replace(R.id.container, DashboardFragment.newInstance(), DashboardFragment.TAG) }
     }
