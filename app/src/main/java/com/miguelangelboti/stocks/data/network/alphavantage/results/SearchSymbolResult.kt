@@ -1,5 +1,6 @@
 package com.miguelangelboti.stocks.data.network.alphavantage.results
 
+import com.miguelangelboti.stocks.data.entities.StockInfo
 import com.miguelangelboti.stocks.entities.Stock
 import com.squareup.moshi.Json
 
@@ -19,18 +20,21 @@ fun SearchSymbolResult.toDomain(): List<String> {
     return matches.map { it.symbol }
 }
 
-fun SearchSymbolResult.toDomain(symbol: String): Stock? {
-    return matches.find { it.symbol == symbol }?.toDomain()
-}
-
-private fun Match.toDomain(): Stock {
-    return Stock(
-        symbol = symbol,
-        name = name,
-        region = region,
-        marketOpen = marketOpen,
-        marketClose = marketClose,
-        timezone = timezone,
-        currency = currency
-    )
+fun SearchSymbolResult.toDomain(stockInfo: StockInfo): Stock? {
+    return matches
+        .find { it.symbol == stockInfo.symbol }
+        ?.run {
+            Stock(
+                symbol = symbol,
+                name = name,
+                region = region,
+                marketOpen = marketOpen,
+                marketClose = marketClose,
+                timezone = timezone,
+                currency = currency,
+                price = stockInfo.price,
+                priceOpen = stockInfo.priceOpen,
+                priceDate = stockInfo.priceDate
+            )
+        }
 }

@@ -6,7 +6,6 @@ import com.miguelangelboti.stocks.data.network.NetworkDataSource
 import com.miguelangelboti.stocks.entities.Order
 import com.miguelangelboti.stocks.entities.OrderRequest
 import com.miguelangelboti.stocks.entities.Stock
-import com.miguelangelboti.stocks.utils.getUtcDatetimeAsString
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import javax.inject.Inject
@@ -28,21 +27,17 @@ class StocksRepository @Inject constructor(
         Timber.d("addOrder($request)")
         val stock = getStock(request.symbol)
         require(stock != null) { "The stock was not found adding a new order!" }
-        localDataSource.addOrder(Order(request, stock))
-    }
-
-    private suspend fun getStock(symbol: String): Stock? {
-        Timber.d("getStock($symbol)")
-        return localDataSource.getStock(symbol)
-            ?: networkDataSource.getStock(symbol)?.also {
-                val id = localDataSource.addStock(it)
-                return it.copy(id = id)
-            }
+        localDataSource.addOrder(stock.id, Order(request))
     }
 
     suspend fun deleteOrder(orderId: Int) {
         Timber.d("deleteOrder($orderId)")
         localDataSource.deleteOrder(orderId)
+    }
+
+    suspend fun getStock(stockId: Int): Stock? {
+        Timber.d("getStock($stockId)")
+        return localDataSource.getStock(stockId)
     }
 
     suspend fun getStocks(): List<Stock> {
@@ -57,36 +52,20 @@ class StocksRepository @Inject constructor(
         return localDataSource.getStocks()
     }
 
-    private suspend fun List<Stock>.updateStockPrices() {
-        val date = getUtcDatetimeAsString()
-        forEach {
-            val price = networkDataSource.getStockPrice(it.symbol)
-            localDataSource.updatePrice(it.symbol, price, date)
-        }
-    }
-
-    suspend fun getOrders(stockId: Int): List<Order> {
-        Timber.d("getOrders($stockId)")
-        // TODO: Check the best time to update prices.
-        val elapsedTime = (System.currentTimeMillis() - lasTimestamp).absoluteValue
-        if (elapsedTime > cacheTime) {
-            Timber.d("The cache is not valid.")
-            lasTimestamp = System.currentTimeMillis()
-            return localDataSource.getOrders(stockId).also { it.updatePrices() }
-        }
-        Timber.d("The cache is valid.")
-        return localDataSource.getOrders(stockId)
-    }
-
-    private suspend fun List<Order>.updatePrices() {
-        Timber.d("updatePrices()")
-        val date = getUtcDatetimeAsString()
-        map { it.stock.symbol }
-            .distinct()
-            .forEach { symbol ->
-                val price = networkDataSource.getStockPrice(symbol)
-                localDataSource.updatePrice(symbol, price, date)
+    private suspend fun getStock(symbol: String): Stock? {
+        Timber.d("getStock($symbol)")
+        return localDataSource.getStock(symbol)
+            ?: networkDataSource.getStock(symbol)?.also {
+                val id = localDataSource.addStock(it)
+                return it.copy(id = id)
             }
+    }
+
+    private suspend fun List<Stock>.updateStockPrices() {
+        forEach {
+            val stockInfo = networkDataSource.getStockInfo(it.symbol)
+            localDataSource.updatePrice(it.symbol, stockInfo)
+        }
     }
 
     suspend fun searchSymbol(symbol: String): List<String> {

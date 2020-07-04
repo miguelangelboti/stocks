@@ -1,7 +1,7 @@
 package com.miguelangelboti.stocks.data.local
 
 import android.content.Context
-import com.miguelangelboti.stocks.data.local.entities.OrderEntity
+import com.miguelangelboti.stocks.data.entities.StockInfo
 import com.miguelangelboti.stocks.data.local.entities.toDomain
 import com.miguelangelboti.stocks.data.local.entities.toEntity
 import com.miguelangelboti.stocks.entities.Order
@@ -17,17 +17,24 @@ class LocalDataSource(context: Context) {
 
     suspend fun getStocks(): List<Stock> {
         Timber.d("getStocks()")
-        return stockDao.getStocks().map { it.toDomain() }
+        return stockDao.getStocks().map {
+            val orders = orderDao.getOrders(it.id).toDomain()
+            it.toDomain(orders)
+        }
     }
 
     suspend fun getStock(id: Int): Stock? {
         Timber.d("getStock($id)")
-        return stockDao.getStock(id)?.toDomain()
+        val stock = stockDao.getStock(id) ?: return null
+        val orders = orderDao.getOrders(stock.id).toDomain()
+        return stock.toDomain(orders)
     }
 
     suspend fun getStock(symbol: String): Stock? {
         Timber.d("getStock($symbol)")
-        return stockDao.getStock(symbol)?.toDomain()
+        val stock = stockDao.getStock(symbol) ?: return null
+        val orders = orderDao.getOrders(stock.id).toDomain()
+        return stockDao.getStock(symbol)?.toDomain(orders)
     }
 
     suspend fun addStock(stock: Stock): Int {
@@ -35,19 +42,9 @@ class LocalDataSource(context: Context) {
         return stockDao.insert(stock.toEntity()).toInt()
     }
 
-    suspend fun getOrders(): List<Order> {
-        Timber.d("getOrders()")
-        return orderDao.getOrders().toDomain()
-    }
-
-    suspend fun getOrders(stockId: Int): List<Order> {
-        Timber.d("getOrders($stockId)")
-        return orderDao.getOrders(stockId).toDomain()
-    }
-
-    suspend fun addOrder(order: Order) {
+    suspend fun addOrder(stockId: Int, order: Order) {
         Timber.d("addOrder($order)")
-        orderDao.insert(order.toEntity())
+        orderDao.insert(order.toEntity(stockId))
     }
 
     suspend fun deleteOrder(orderId: Int) {
@@ -55,16 +52,8 @@ class LocalDataSource(context: Context) {
         orderDao.delete(orderId)
     }
 
-    suspend fun updatePrice(symbol: String, price: Float, priceDate: String) {
-        Timber.d("updatePrice($symbol, $price, $priceDate)")
-        stockDao.update(symbol, price, priceDate)
-    }
-
-    private suspend fun List<OrderEntity>.toDomain(): List<Order> {
-        return map { order ->
-            val stock = getStock(order.stockId)
-            require(stock != null) { "The stock was not found getting the orders!" }
-            toDomain(order, stock)
-        }
+    suspend fun updatePrice(symbol: String, stockInfo: StockInfo) {
+        Timber.d("updatePrice($symbol, $stockInfo)")
+        stockDao.update(symbol, stockInfo.price, stockInfo.priceOpen, stockInfo.priceDate)
     }
 }

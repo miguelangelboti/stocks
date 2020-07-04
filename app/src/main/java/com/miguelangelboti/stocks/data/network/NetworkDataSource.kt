@@ -1,5 +1,6 @@
 package com.miguelangelboti.stocks.data.network
 
+import com.miguelangelboti.stocks.data.entities.StockInfo
 import com.miguelangelboti.stocks.data.network.alphavantage.AlphaVantageApi
 import com.miguelangelboti.stocks.data.network.alphavantage.results.toDomain
 import com.miguelangelboti.stocks.entities.Stock
@@ -15,9 +16,9 @@ class NetworkDataSource {
         .build()
         .create(AlphaVantageApi::class.java)
 
-    suspend fun getStockPrice(symbol: String): Float {
-        Timber.d("getStockPrice($symbol)")
-        return service.getStockPrice(symbol).quote.price
+    suspend fun getStockInfo(symbol: String): StockInfo {
+        Timber.d("getStockInfo($symbol)")
+        return service.getStockInfo(symbol).toDomain()
     }
 
     suspend fun searchSymbol(symbol: String): List<String> {
@@ -27,6 +28,7 @@ class NetworkDataSource {
 
     suspend fun getStock(symbol: String): Stock? {
         Timber.d("getStock($symbol)")
-        return service.searchSymbol(symbol).toDomain(symbol)
+        val stockInfo = getStockInfo(symbol)
+        return service.searchSymbol(symbol).toDomain(stockInfo)
     }
 }

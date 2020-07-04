@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.miguelangelboti.stocks.R
+import com.miguelangelboti.stocks.entities.Stock
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_orders.recyclerView
 import kotlinx.android.synthetic.main.fragment_orders.swipeRefreshLayout
@@ -35,17 +36,25 @@ class OrdersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = OrdersAdapter(view.context)
-        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
         recyclerView.addItemDecoration(DividerItemDecoration(context, VERTICAL))
         swipeRefreshLayout.setOnRefreshListener { viewModel.refresh(getStockId()) }
         viewModel.stopRefresh.observe(viewLifecycleOwner) { swipeRefreshLayout.isRefreshing = false }
-        viewModel.orders.observe(viewLifecycleOwner) { adapter.setData(it) }
+        viewModel.stock.observe(viewLifecycleOwner) { setStock(it) }
         viewModel.init(getStockId())
     }
 
     private fun getStockId(): Int {
         return requireArguments().getInt(BUNDLE_KEY_STOCK_ID)
+    }
+
+    private fun setStock(stock: Stock) {
+        val context = context ?: return
+        val adapter = (recyclerView.adapter as OrdersAdapter?)
+        if (adapter != null) {
+            adapter.setStock(stock)
+        } else {
+            recyclerView.adapter = OrdersAdapter(context, stock)
+        }
     }
 }

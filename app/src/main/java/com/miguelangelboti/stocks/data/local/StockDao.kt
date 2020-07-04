@@ -20,6 +20,6 @@ interface StockDao {
     @Insert
     suspend fun insert(entity: StockEntity): Long
 
-    @Query("UPDATE stocks SET price = :price, price_date = :priceDate WHERE symbol = :symbol")
-    suspend fun update(symbol: String, price: Float, priceDate: String)
+    @Query("UPDATE stocks SET price = :price, price_open = :priceOpen, price_date = :priceDate WHERE symbol = :symbol")
+    suspend fun update(symbol: String, price: Float, priceOpen: Float, priceDate: String)
 }

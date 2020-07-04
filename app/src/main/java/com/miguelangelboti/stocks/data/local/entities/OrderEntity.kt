@@ -6,7 +6,6 @@ import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
 import com.miguelangelboti.stocks.entities.Order
-import com.miguelangelboti.stocks.entities.Stock
 
 @Entity(
     tableName = "orders",
@@ -26,14 +25,18 @@ class OrderEntity(
     @ColumnInfo(name = "price") val price: Float
 )
 
-fun Order.toEntity(): OrderEntity {
+fun Order.toEntity(stockId: Int): OrderEntity {
     return OrderEntity(
-        stockId = stock.id,
+        stockId = stockId,
         stocks = stocks,
         price = price
     )
 }
 
-fun toDomain(entity: OrderEntity, stock: Stock): Order {
-    return Order(entity.id, stock, entity.stocks, entity.price)
+fun toDomain(entity: OrderEntity): Order {
+    return Order(entity.id, entity.stocks, entity.price)
+}
+
+fun List<OrderEntity>.toDomain(): List<Order> {
+    return map { toDomain(it) }
 }

@@ -3,6 +3,7 @@ package com.miguelangelboti.stocks.data.local.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.miguelangelboti.stocks.entities.Order
 import com.miguelangelboti.stocks.entities.Stock
 
 @Entity(tableName = "stocks")
@@ -16,6 +17,7 @@ class StockEntity(
     @ColumnInfo(name = "timezone") val timezone: String,
     @ColumnInfo(name = "currency") val currency: String,
     @ColumnInfo(name = "price") val price: Float,
+    @ColumnInfo(name = "price_open") val priceOpen: Float,
     @ColumnInfo(name = "price_date") val priceDate: String
 )
 
@@ -29,12 +31,13 @@ fun Stock.toEntity(): StockEntity {
         marketClose = marketClose,
         timezone = timezone,
         currency = currency,
-        price = 0f,     // TODO: Complete this retrieving the price previously.
-        priceDate = ""  // TODO: Complete this property.
+        price = price,
+        priceOpen = priceOpen,
+        priceDate = priceDate
     )
 }
 
-fun StockEntity.toDomain(): Stock {
+fun StockEntity.toDomain(orders: List<Order>): Stock {
     return Stock(
         id = id,
         symbol = symbol,
@@ -45,6 +48,8 @@ fun StockEntity.toDomain(): Stock {
         timezone = timezone,
         currency = currency,
         price = price,
-        priceDate = priceDate
+        priceOpen = priceOpen,
+        priceDate = priceDate,
+        orders = orders
     )
 }

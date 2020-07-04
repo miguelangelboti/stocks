@@ -9,6 +9,8 @@ data class Stock(
     val marketClose: String,
     val timezone: String,
     val currency: String,
-    val price: Float? = null,
-    val priceDate: String? = null
+    val price: Float,
+    val priceOpen: Float,
+    val priceDate: String,
+    val orders: List<Order> = emptyList()
 )

@@ -13,6 +13,7 @@ import com.daimajia.swipe.adapters.RecyclerSwipeAdapter
 import com.miguelangelboti.stocks.R
 import com.miguelangelboti.stocks.R.layout
 import com.miguelangelboti.stocks.entities.Order
+import com.miguelangelboti.stocks.entities.Stock
 import com.miguelangelboti.stocks.entities.getProfitability
 import com.miguelangelboti.stocks.entities.hasPositiveProfitability
 import com.miguelangelboti.stocks.ui.orders.OrdersAdapter.OrderViewHolder
@@ -20,13 +21,13 @@ import com.miguelangelboti.stocks.utils.getCurrencySymbol
 import kotlinx.android.synthetic.main.item_order.view.swipeForegroundLayout
 
 class OrdersAdapter internal constructor(
-    private val context: Context
+    private val context: Context,
+    private var stock: Stock
 ) : RecyclerSwipeAdapter<OrderViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private var data = emptyList<Order>()
 
-    override fun getItemCount() = data.size
+    override fun getItemCount() = stock.orders.size
     override fun getItemId(position: Int) = position.toLong()
     override fun getSwipeLayoutResourceId(position: Int) = R.id.swipeLayout
 
@@ -35,35 +36,33 @@ class OrdersAdapter internal constructor(
         return OrderViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
-        val current = data[position]
-        val profitabilityColor = if (current.hasPositiveProfitability()) R.color.green else R.color.red
-        holder.stocksTextView.text = context.getString(R.string.titles, current.stocks.toString())
-        holder.priceTextView.text = current.price.toString()
-        holder.profitabilityTextView.text = current.getProfitability()
-        holder.profitabilityTextView.setTextColor(ContextCompat.getColor(context, profitabilityColor))
-        holder.currencyTextView.text = getCurrencySymbol(current.stock.currency)
-        holder.swipeLayout.showMode = SwipeLayout.ShowMode.LayDown
-        setListeners(holder, current)
-        mItemManger.bindView(holder.itemView, position)
+    override fun onBindViewHolder(holder: OrderViewHolder, position: Int) = with(holder) {
+        val order = stock.orders[position]
+        val colorResId = if (order.hasPositiveProfitability(stock.price)) R.color.green else R.color.red
+        val color = ContextCompat.getColor(context, colorResId)
+        stocksTextView.text = context.getString(R.string.titles, order.stocks.toString())
+        priceTextView.text = order.price.toString()
+        profitabilityTextView.text = order.getProfitability(stock.price)
+        profitabilityTextView.setTextColor(color)
+        currencyTextView.text = getCurrencySymbol(stock.currency)
+        currencyTextView.setTextColor(color)
+        swipeLayout.showMode = SwipeLayout.ShowMode.LayDown
+        setListeners(order)
+        mItemManger.bindView(itemView, position)
     }
 
-    internal fun setData(data: List<Order>) {
-        this.data = data
+    internal fun setStock(stock: Stock) {
+        this.stock = stock
         notifyDataSetChanged()
     }
 
-    private fun setListeners(holder: OrderViewHolder, current: Order) {
-        holder.swipeLayout.swipeForegroundLayout.setOnLongClickListener {
-            holder.swipeLayout.open()
+    private fun OrderViewHolder.setListeners(order: Order) {
+        swipeLayout.swipeForegroundLayout.setOnLongClickListener {
+            swipeLayout.open()
             true
         }
-        holder.swipeLayout.swipeForegroundLayout.setOnClickListener {
-            Toast.makeText(
-                holder.itemView.context,
-                current.stock.symbol,
-                Toast.LENGTH_SHORT
-            ).show()
+        swipeLayout.swipeForegroundLayout.setOnClickListener {
+            Toast.makeText(itemView.context, order.price.toString(), Toast.LENGTH_SHORT).show()
         }
     }
 
