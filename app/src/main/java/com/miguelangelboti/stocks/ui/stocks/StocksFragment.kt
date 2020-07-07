@@ -29,7 +29,7 @@ class StocksFragment : Fragment() {
     private val viewModel by viewModels<StocksViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_orders, container, false)
+        return inflater.inflate(R.layout.fragment_stocks, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
