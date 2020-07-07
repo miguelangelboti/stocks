@@ -66,7 +66,7 @@ class OrdersAdapter internal constructor(
         }
     }
 
-    inner class OrderViewHolder(itemView: View) : ViewHolder(itemView) {
+    class OrderViewHolder(itemView: View) : ViewHolder(itemView) {
         val swipeLayout: SwipeLayout = itemView.findViewById(R.id.swipeLayout)
         val stocksTextView: TextView = itemView.findViewById(R.id.stocksTextView)
         val priceTextView: TextView = itemView.findViewById(R.id.priceTextView)

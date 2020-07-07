@@ -31,14 +31,14 @@ class StocksAdapter internal constructor(
         return StocksViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: StocksViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: StocksViewHolder, position: Int) = with(holder) {
         val current = data[position]
-        holder.symbolTextView.text = current.symbol
-        holder.nameTextView.text = current.name
-        holder.priceTextView.text = current.price.toString()
-        holder.swipeLayout.showMode = SwipeLayout.ShowMode.LayDown
-        setListeners(holder, current)
-        mItemManger.bindView(holder.itemView, position)
+        symbolTextView.text = current.symbol
+        nameTextView.text = current.name
+        priceTextView.text = current.price.toString()
+        swipeLayout.showMode = SwipeLayout.ShowMode.LayDown
+        setListeners(current)
+        mItemManger.bindView(itemView, position)
     }
 
     internal fun setData(data: List<Stock>) {
@@ -46,15 +46,15 @@ class StocksAdapter internal constructor(
         notifyDataSetChanged()
     }
 
-    private fun setListeners(holder: StocksViewHolder, current: Stock) {
-        holder.swipeLayout.swipeForegroundLayout.setOnClickListener { listener(current) }
-        holder.swipeLayout.swipeForegroundLayout.setOnLongClickListener {
-            holder.swipeLayout.open()
+    private fun StocksViewHolder.setListeners(current: Stock) {
+        swipeLayout.swipeForegroundLayout.setOnClickListener { listener(current) }
+        swipeLayout.swipeForegroundLayout.setOnLongClickListener {
+            swipeLayout.open()
             true
         }
     }
 
-    inner class StocksViewHolder(itemView: View) : ViewHolder(itemView) {
+    class StocksViewHolder(itemView: View) : ViewHolder(itemView) {
         val swipeLayout: SwipeLayout = itemView.findViewById(R.id.swipeLayout)
         val symbolTextView: TextView = itemView.findViewById(R.id.symbolTextView)
         val nameTextView: TextView = itemView.findViewById(R.id.nameTextView)
