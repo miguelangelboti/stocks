@@ -7,7 +7,7 @@ data class Stock(
     val region: String,
     val marketOpen: String,
     val marketClose: String,
-    val timezone: String,
+    val timeZone: String,
     val currency: String,
     val price: Float,
     val priceOpen: Float,

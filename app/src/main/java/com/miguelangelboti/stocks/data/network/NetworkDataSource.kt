@@ -1,9 +1,11 @@
 package com.miguelangelboti.stocks.data.network
 
-import com.miguelangelboti.stocks.data.entities.StockInfo
-import com.miguelangelboti.stocks.data.network.alphavantage.AlphaVantageApi
-import com.miguelangelboti.stocks.data.network.alphavantage.results.toDomain
+import com.miguelangelboti.stocks.BuildConfig
+import com.miguelangelboti.stocks.data.network.spreadsheet.SpreadsheetApi
+import com.miguelangelboti.stocks.data.network.spreadsheet.results.StockInfoResult
+import com.miguelangelboti.stocks.data.network.spreadsheet.results.toDomain
 import com.miguelangelboti.stocks.entities.Stock
+import com.miguelangelboti.stocks.utils.getUtcDatetimeAsString
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
 import retrofit2.Retrofit.Builder
@@ -14,25 +16,35 @@ import okhttp3.OkHttpClient.Builder as OkHttpBuilder
 class NetworkDataSource {
 
     private var service = Builder()
-        .baseUrl("https://www.alphavantage.co/")
+        .baseUrl("https://script.google.com/macros/s/${BuildConfig.SPREADSHEET_ID}/")
         .addConverterFactory(MoshiConverterFactory.create())
         .client(OkHttpBuilder().addInterceptor(HttpLoggingInterceptor().apply { level = BODY }).build())
         .build()
-        .create(AlphaVantageApi::class.java)
-
-    suspend fun getStockInfo(symbol: String): StockInfo {
-        Timber.d("getStockInfo($symbol)")
-        return service.getStockInfo(symbol).toDomain()
-    }
+        .create(SpreadsheetApi::class.java)
 
     suspend fun searchSymbol(symbol: String): List<String> {
         Timber.d("searchSymbol($symbol)")
-        return service.searchSymbol(symbol).toDomain()
+        return service.searchSymbol(symbol)
     }
 
     suspend fun getStock(symbol: String): Stock? {
         Timber.d("getStock($symbol)")
-        val stockInfo = getStockInfo(symbol)
-        return service.searchSymbol(symbol).toDomain(stockInfo)
+        return service.getStockInfo(symbol).first().toDomain()
+    }
+
+    suspend fun updateStocks(stocks: List<Stock>): List<Stock> {
+        val symbols = stocks.joinToString(separator = ",") { it.symbol }
+        Timber.d("updateStocks($symbols)")
+        val result = service.getStockInfo(symbols)
+        return stocks.map { stock -> stock.updatePrice(result.firstOrNull { stock.symbol == it.symbol }) }
+    }
+
+    private fun Stock.updatePrice(stockInfo: StockInfoResult?): Stock {
+        stockInfo ?: return this
+        return copy(
+            price = stockInfo.price,
+            priceOpen = stockInfo.priceOpen,
+            priceDate = getUtcDatetimeAsString()
+        )
     }
 }

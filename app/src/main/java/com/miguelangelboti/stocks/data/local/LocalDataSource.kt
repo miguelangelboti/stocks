@@ -1,7 +1,6 @@
 package com.miguelangelboti.stocks.data.local
 
 import android.content.Context
-import com.miguelangelboti.stocks.data.entities.StockInfo
 import com.miguelangelboti.stocks.data.local.entities.toDomain
 import com.miguelangelboti.stocks.data.local.entities.toEntity
 import com.miguelangelboti.stocks.entities.Order
@@ -52,8 +51,9 @@ class LocalDataSource(context: Context) {
         orderDao.delete(orderId)
     }
 
-    suspend fun updatePrice(symbol: String, stockInfo: StockInfo) {
-        Timber.d("updatePrice($symbol, $stockInfo)")
-        stockDao.update(symbol, stockInfo.price, stockInfo.priceOpen, stockInfo.priceDate)
+    suspend fun updateStocks(stocks: List<Stock>) {
+        stocks.forEach {
+            stockDao.update(it.symbol, it.price, it.priceOpen, it.priceDate)
+        }
     }
 }

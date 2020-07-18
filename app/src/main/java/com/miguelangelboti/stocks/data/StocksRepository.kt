@@ -46,7 +46,10 @@ class StocksRepository @Inject constructor(
         if (elapsedTime > cacheTime) {
             Timber.d("The cache is not valid.")
             lasTimestamp = System.currentTimeMillis()
-            return localDataSource.getStocks().also { it.updateStockPrices() }
+            val localStocks = localDataSource.getStocks()
+            val updatedStock = networkDataSource.updateStocks(localStocks)
+            localDataSource.updateStocks(updatedStock)
+            return updatedStock
         }
         Timber.d("The cache is valid.")
         return localDataSource.getStocks()
@@ -59,13 +62,6 @@ class StocksRepository @Inject constructor(
                 val id = localDataSource.addStock(it)
                 return it.copy(id = id)
             }
-    }
-
-    private suspend fun List<Stock>.updateStockPrices() {
-        forEach {
-            val stockInfo = networkDataSource.getStockInfo(it.symbol)
-            localDataSource.updatePrice(it.symbol, stockInfo)
-        }
     }
 
     suspend fun searchSymbol(symbol: String): List<String> {
