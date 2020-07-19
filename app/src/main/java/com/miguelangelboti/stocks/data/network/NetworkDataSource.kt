@@ -35,7 +35,11 @@ class NetworkDataSource {
     suspend fun updateStocks(stocks: List<Stock>): List<Stock> {
         val symbols = stocks.joinToString(separator = ",") { it.symbol }
         Timber.d("updateStocks($symbols)")
-        val result = service.getStockInfo(symbols)
+        val result = try {
+            service.getStockInfo(symbols)
+        } catch (ignored: Exception) {
+            return stocks
+        }
         return stocks.map { stock -> stock.updatePrice(result.firstOrNull { stock.symbol == it.symbol }) }
     }
 
