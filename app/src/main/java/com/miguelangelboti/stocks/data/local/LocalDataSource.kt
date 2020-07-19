@@ -5,6 +5,8 @@ import com.miguelangelboti.stocks.data.local.entities.toDomain
 import com.miguelangelboti.stocks.data.local.entities.toEntity
 import com.miguelangelboti.stocks.entities.Order
 import com.miguelangelboti.stocks.entities.Stock
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import timber.log.Timber
 
 class LocalDataSource(context: Context) {
@@ -19,6 +21,16 @@ class LocalDataSource(context: Context) {
         return stockDao.getStocks().map {
             val orders = orderDao.getOrders(it.id).toDomain()
             it.toDomain(orders)
+        }
+    }
+
+    fun getStocksFlow(): Flow<List<Stock>> {
+        Timber.d("getStocks()")
+        return stockDao.getStocksFlow().map {
+            it.map { stock ->
+                val orders = orderDao.getOrders(stock.id).toDomain()
+                stock.toDomain(orders)
+            }
         }
     }
 

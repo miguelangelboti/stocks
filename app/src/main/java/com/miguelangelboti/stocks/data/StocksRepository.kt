@@ -7,6 +7,7 @@ import com.miguelangelboti.stocks.entities.Order
 import com.miguelangelboti.stocks.entities.OrderRequest
 import com.miguelangelboti.stocks.entities.Stock
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -40,19 +41,9 @@ class StocksRepository @Inject constructor(
         return localDataSource.getStock(stockId)
     }
 
-    suspend fun getStocks(): List<Stock> {
+    fun getStocks(): Flow<List<Stock>> {
         Timber.d("getStocks()")
-        val elapsedTime = (System.currentTimeMillis() - lasTimestamp).absoluteValue
-        if (elapsedTime > cacheTime) {
-            Timber.d("The cache is not valid.")
-            lasTimestamp = System.currentTimeMillis()
-            val localStocks = localDataSource.getStocks()
-            val updatedStock = networkDataSource.updateStocks(localStocks)
-            localDataSource.updateStocks(updatedStock)
-            return updatedStock
-        }
-        Timber.d("The cache is valid.")
-        return localDataSource.getStocks()
+        return localDataSource.getStocksFlow()
     }
 
     private suspend fun getStock(symbol: String): Stock? {
@@ -66,5 +57,19 @@ class StocksRepository @Inject constructor(
 
     suspend fun searchSymbol(symbol: String): List<String> {
         return networkDataSource.searchSymbol(symbol)
+    }
+
+    suspend fun update() {
+        Timber.d("update()")
+        val elapsedTime = (System.currentTimeMillis() - lasTimestamp).absoluteValue
+        if (elapsedTime > cacheTime) {
+            Timber.d("The cache is not valid.")
+            lasTimestamp = System.currentTimeMillis()
+            val localStocks = localDataSource.getStocks()
+            val updatedStock = networkDataSource.updateStocks(localStocks)
+            localDataSource.updateStocks(updatedStock)
+        } else {
+            Timber.d("The cache is valid.")
+        }
     }
 }

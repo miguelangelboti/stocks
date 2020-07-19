@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.miguelangelboti.stocks.data.StocksRepository
-import com.miguelangelboti.stocks.entities.Order
 import com.miguelangelboti.stocks.entities.Stock
 import com.miguelangelboti.stocks.utils.event.VoidEvent
 import kotlinx.coroutines.launch
@@ -15,7 +14,6 @@ class OrdersViewModel @ViewModelInject constructor(
     private val repository: StocksRepository
 ) : ViewModel() {
 
-    // val orders = liveData(Dispatchers.IO) { emit(repository.getOrders()) }
     private val _stock = MutableLiveData<Stock>()
     val stock: LiveData<Stock> = _stock
 
@@ -29,6 +27,8 @@ class OrdersViewModel @ViewModelInject constructor(
     }
 
     fun refresh(stockId: Int) = viewModelScope.launch {
+        // TODO: Remove this logic, stock prices must be updated automatically.
+        repository.update()
         _stock.value = repository.getStock(stockId)
         _stopRefresh.value = VoidEvent()
     }

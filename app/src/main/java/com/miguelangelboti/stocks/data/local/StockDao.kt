@@ -4,12 +4,16 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.miguelangelboti.stocks.data.local.entities.StockEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface StockDao {
 
     @Query("SELECT * from stocks")
     suspend fun getStocks(): List<StockEntity>
+
+    @Query("SELECT * from stocks")
+    fun getStocksFlow(): Flow<List<StockEntity>>
 
     @Query("SELECT * from stocks WHERE id = :id")
     suspend fun getStock(id: Int): StockEntity?
