@@ -3,7 +3,6 @@ package com.miguelangelboti.stocks
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View.INVISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commitNow
 import com.miguelangelboti.stocks.ui.add.AddOrderActivity
@@ -25,6 +24,17 @@ class MainActivity : AppCompatActivity() {
 
         bottomNavigation.setOnNavigationItemSelectedListener(::onNavigationItemSelected)
         fab.setOnClickListener { startActivity(Intent(this, AddOrderActivity::class.java)) }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("IS_FAB_VISIBLE", fab.isOrWillBeShown)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        val isFabVisible = savedInstanceState.getBoolean("IS_FAB_VISIBLE")
+        if (isFabVisible) fab.show() else fab.hide()
     }
 
     private fun onNavigationItemSelected(item: MenuItem) = when (item.itemId) {
