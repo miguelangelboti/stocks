@@ -1,5 +1,7 @@
 package com.miguelangelboti.stocks.entities
 
+import com.miguelangelboti.stocks.utils.extensions.sumByFloat
+
 data class Stock(
     val id: Int = 0,
     val symbol: String,
@@ -14,3 +16,7 @@ data class Stock(
     val priceDate: String,
     val orders: List<Order> = emptyList()
 )
+
+fun Stock.getProfitability(): Float {
+    return orders.sumByFloat { it.getProfitability(price) }
+}

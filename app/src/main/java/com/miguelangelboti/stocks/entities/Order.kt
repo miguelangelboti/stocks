@@ -11,14 +11,10 @@ data class Order(
     )
 }
 
-fun Order.hasPositiveProfitability(price: Float): Boolean {
-    return getProfitability(price)?.let { it >= 0 } ?: false
+fun Order.hasProfits(price: Float): Boolean {
+    return getProfitability(price) >= 0
 }
 
-fun Order.getProfitability(price: Float, decimals: Int = 2): String {
-    return getProfitability(price)?.let { "%.${decimals}f".format(it) } ?: ""
-}
-
-private fun Order.getProfitability(price: Float): Float? {
+fun Order.getProfitability(price: Float): Float {
     return price * stocks - stocks * this.price
 }

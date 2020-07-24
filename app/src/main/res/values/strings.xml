@@ -12,4 +12,6 @@
     <string name="stock_price_not_valid">El valor no es valido</string>
     <string name="stocks_number_not_valid">El valor no es valido</string>
     <string name="titles">Títulos %s</string>
+    <string name="euros">Euros</string>
+    <string name="dollars">Dólares</string>
 </resources>

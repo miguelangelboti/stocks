@@ -15,8 +15,9 @@ import com.miguelangelboti.stocks.R.layout
 import com.miguelangelboti.stocks.entities.Order
 import com.miguelangelboti.stocks.entities.Stock
 import com.miguelangelboti.stocks.entities.getProfitability
-import com.miguelangelboti.stocks.entities.hasPositiveProfitability
+import com.miguelangelboti.stocks.entities.hasProfits
 import com.miguelangelboti.stocks.ui.orders.OrdersAdapter.OrderViewHolder
+import com.miguelangelboti.stocks.utils.extensions.format
 import com.miguelangelboti.stocks.utils.getCurrencySymbol
 import kotlinx.android.synthetic.main.item_order.view.swipeForegroundLayout
 
@@ -38,11 +39,11 @@ class OrdersAdapter internal constructor(
 
     override fun onBindViewHolder(holder: OrderViewHolder, position: Int) = with(holder) {
         val order = stock.orders[position]
-        val colorResId = if (order.hasPositiveProfitability(stock.price)) R.color.green else R.color.red
+        val colorResId = if (order.hasProfits(stock.price)) R.color.green else R.color.red
         val color = ContextCompat.getColor(context, colorResId)
         stocksTextView.text = context.getString(R.string.titles, order.stocks.toString())
         priceTextView.text = order.price.toString()
-        profitabilityTextView.text = order.getProfitability(stock.price)
+        profitabilityTextView.text = order.getProfitability(stock.price).format()
         profitabilityTextView.setTextColor(color)
         currencyTextView.text = getCurrencySymbol(stock.currency)
         currencyTextView.setTextColor(color)
