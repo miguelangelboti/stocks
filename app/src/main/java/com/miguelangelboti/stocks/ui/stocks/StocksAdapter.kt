@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.daimajia.swipe.SwipeLayout
@@ -12,6 +13,7 @@ import com.miguelangelboti.stocks.R
 import com.miguelangelboti.stocks.R.layout
 import com.miguelangelboti.stocks.entities.Stock
 import com.miguelangelboti.stocks.ui.stocks.StocksAdapter.StocksViewHolder
+import com.miguelangelboti.stocks.utils.extensions.setStockIcon
 import kotlinx.android.synthetic.main.item_order.view.swipeForegroundLayout
 
 class StocksAdapter internal constructor(
@@ -33,6 +35,7 @@ class StocksAdapter internal constructor(
 
     override fun onBindViewHolder(holder: StocksViewHolder, position: Int) = with(holder) {
         val current = data[position]
+        imageView.setStockIcon(current)
         symbolTextView.text = current.symbol
         nameTextView.text = current.name
         priceTextView.text = current.price.toString()
@@ -56,6 +59,7 @@ class StocksAdapter internal constructor(
 
     class StocksViewHolder(itemView: View) : ViewHolder(itemView) {
         val swipeLayout: SwipeLayout = itemView.findViewById(R.id.swipeLayout)
+        val imageView: ImageView = itemView.findViewById(R.id.imageView)
         val symbolTextView: TextView = itemView.findViewById(R.id.symbolTextView)
         val nameTextView: TextView = itemView.findViewById(R.id.nameTextView)
         val priceTextView: TextView = itemView.findViewById(R.id.priceTextView)
