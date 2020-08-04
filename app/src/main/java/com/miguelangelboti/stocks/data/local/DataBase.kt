@@ -8,7 +8,7 @@ import com.miguelangelboti.stocks.data.local.entities.OrderEntity
 import com.miguelangelboti.stocks.data.local.entities.StockEntity
 
 @Database(
-    version = 1,
+    version = 2,
     exportSchema = false,
     entities = [
         StockEntity::class,

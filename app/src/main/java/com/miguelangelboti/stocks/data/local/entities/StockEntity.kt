@@ -18,7 +18,8 @@ class StockEntity(
     @ColumnInfo(name = "currency") val currency: String,
     @ColumnInfo(name = "price") val price: Float,
     @ColumnInfo(name = "price_open") val priceOpen: Float,
-    @ColumnInfo(name = "price_date") val priceDate: String
+    @ColumnInfo(name = "price_date") val priceDate: String,
+    @ColumnInfo(name = "icon") val icon: String
 )
 
 fun Stock.toEntity(): StockEntity {
@@ -33,7 +34,8 @@ fun Stock.toEntity(): StockEntity {
         currency = currency,
         price = price,
         priceOpen = priceOpen,
-        priceDate = priceDate
+        priceDate = priceDate,
+        icon = icon
     )
 }
 
@@ -50,6 +52,7 @@ fun StockEntity.toDomain(orders: List<Order>): Stock {
         price = price,
         priceOpen = priceOpen,
         priceDate = priceDate,
+        icon = icon,
         orders = orders
     )
 }

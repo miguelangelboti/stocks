@@ -13,7 +13,8 @@ data class StockInfoResult(
     @field:Json(name = "timeZone") val timeZone: String,
     @field:Json(name = "region") val region: String,
     @field:Json(name = "marketOpen") val marketOpen: String,
-    @field:Json(name = "marketClose") val marketClose: String
+    @field:Json(name = "marketClose") val marketClose: String,
+    @field:Json(name = "icon") val icon: String
 )
 
 fun StockInfoResult.toDomain(): Stock {
@@ -27,6 +28,7 @@ fun StockInfoResult.toDomain(): Stock {
         region = region,
         marketOpen = marketOpen,
         marketClose = marketClose,
+        icon = icon,
         priceDate = getUtcDatetimeAsString()
     )
 }

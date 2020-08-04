@@ -14,6 +14,7 @@ data class Stock(
     val price: Float,
     val priceOpen: Float,
     val priceDate: String,
+    val icon: String,
     val orders: List<Order> = emptyList()
 )
 
